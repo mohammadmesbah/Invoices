@@ -60,16 +60,27 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $req, ProductRequest $request)
     {
-        //
+        $sec_id= Section::where('name',$req->section_name)->first()->id;
+        $product= Product::findorFail($req->id);
+        $product->update([
+            'name'=>$request->input('name'),
+            'description'=>$request->input('description'),
+            'section_id'=>$sec_id
+        ]);
+        session()->flash('Edit',"تم تعديل المنتج بنجاح");
+        return redirect('/products');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Request $request)
     {
-        //
+        $product= Product::findorFail($request->id);
+        $product->delete();
+        session()->flash('delete','تم حذف المنتج بنجاح');
+        return redirect('/products');
     }
 }

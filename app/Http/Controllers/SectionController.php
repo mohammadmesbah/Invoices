@@ -31,21 +31,21 @@ class SectionController extends Controller
     public function store(Request $request)
     {
         $input= $request->all();
-        $exist= Section::where('name',$input['section_name'])->exists();
+        /* $exist= Section::where('name',$input['section_name'])->exists();
         if($exist){
             session()->flash('Error','خطأ القسم مسجل بالقعل');
             return redirect('/sections');
-        }else{
-            /* $validated = $request->validate([
-                'name' => 'required|unique:sections|max:255',
-                'description' => 'required',
+        }else{ */
+            $validated= $request->validate(
+            ['section_name' => 'required|unique:sections,name|max:255',
+            'section_description' => 'required',
             ],
             [
-                'name.required'=>"يجب إدخال الاسم",
-                'name.unique'=>"تم إدخال هذا القسم من قبل",
-                'description.required'=>"يجب إدخال الوصف",
-            ]
-        ); */
+                'section_name.required'=>"يجب إدخال الاسم",
+                'section_name.unique'=>"هذا القسم موجود بالفعل",
+                'section_description.required'=>"يجب إدخال الوصف",
+            ]);
+
             Section::create([
                 'name'=>$request->section_name,
                 'description'=> $request->section_description,
@@ -53,7 +53,7 @@ class SectionController extends Controller
             ]);
             session()->flash('Add','تمت الإضافة بنجاح');
             return redirect('/sections');
-        }
+        
     }
 
     /**
