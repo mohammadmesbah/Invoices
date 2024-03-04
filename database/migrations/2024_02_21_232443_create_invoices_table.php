@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('section_id')->constrained('sections')->cascadeOnDelete();
             $table->string('invoice_number');
             $table->date('invoice_Date');
             $table->date('due_date');
             $table->string('product');
-            $table->string('section');
-            $table->string('discount');
+            $table->decimal('discount',8,2);
+            $table->decimal('amount_collection',8,2)->nullable();
+            $table->decimal('amount_commission',8,2);
             $table->string('rate_vat');
             $table->decimal('value_vat',8,2);
             $table->decimal('total',8,2);

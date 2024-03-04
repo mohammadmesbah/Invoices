@@ -17,6 +17,15 @@
 
 @section('page-header')
     <!-- breadcrumb -->
+    @if (session()->has('Add'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{session()->get('Add')}}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
+
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
@@ -28,15 +37,6 @@
     <!-- breadcrumb -->
 @endsection
 @section('content')
-
-    @if (session()->has('Add'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>{{ session()->get('Add') }}</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
 
     <!-- row -->
     <div class="row">

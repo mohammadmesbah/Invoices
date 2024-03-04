@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\InvoiceDetailController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionController;
@@ -35,9 +36,13 @@ require __DIR__.'/auth.php';
 Route::resource('invoices',InvoiceController::class);
 Route::resource('sections',SectionController::class);
 Route::resource('products',ProductController::class);
+Route::get('invoice_details/{invoice_number}',[InvoiceDetailController::class,'index']);
+Route::get('view_file/{folder_name}/{file_name}',[InvoiceDetailController::class,'show']);
+Route::get('download_file/{folder_name}/{file_name}',[InvoiceDetailController::class,'download_file']);
+Route::post('delete',[InvoiceDetailController::class,'destroy'])->name('files.destroy');
 
 Route::get('/section/{id}',[InvoiceController::class,'getProducts']);
 
-Route::get('/modal',function(){
-    return view('modals');
+Route::get('/tabs',function(){
+    return view('tabs');
 });
