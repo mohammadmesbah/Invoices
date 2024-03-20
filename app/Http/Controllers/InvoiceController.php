@@ -9,6 +9,8 @@ use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class InvoiceController extends Controller
 {
@@ -48,7 +50,7 @@ class InvoiceController extends Controller
             'value_vat'=> $request->Value_VAT,
             'total'=> $request->Total,
             'status'=> 'غير مدفوعه',
-            'value_status'=> 2,
+            'value_status'=> 3,
             'note'=> $request->note,
             'user'=> Auth::user()->name
         ]);
@@ -91,33 +93,154 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Invoice $invoice)
+    public function show($invoice_id)
     {
-        //
+        $invoices= Invoice::findOrFail($invoice_id);
+        $attachments= $invoices->invoice_attachments;
+        return view('invoices.change_status',compact('invoices','attachments'));
+    }
+    public function changeStatus(Request $request)
+    {
+        $invoice= Invoice::findOrFail($request->invoice_id);
+        if($request->status == "مدفوعة"){
+            $invoice->update([
+                'status'=> $request->status,
+                'value_status'=> 1,
+                'payment_date'=>$request->payment_date
+            ]);
+            Invoice_detail::create([
+                'invoice_id'=> $request->invoice_id,
+                'invoice_number'=> $request->invoice_number,
+                'product'=> $request->product,
+                'section'=> $request->Section,
+                'status'=> $request->status,
+                'value_status'=> 1,
+                'payment_date'=>$request->payment_date,
+                'note'=> $request->note,
+                'user'=> Auth::user()->name
+            ]);
+        }elseif($request->status == "مدفوعة جزئيا"){
+            $invoice->update([
+                'status'=> $request->status,
+                'value_status'=> 2,
+                'payment_date'=>$request->payment_date
+            ]);
+            Invoice_detail::create([
+                'invoice_id'=> $request->invoice_id,
+                'invoice_number'=> $request->invoice_number,
+                'product'=> $request->product,
+                'section'=> $request->Section,
+                'status'=> $request->status,
+                'value_status'=> 2,
+                'payment_date'=>$request->payment_date,
+                'note'=> $request->note,
+                'user'=> Auth::user()->name
+            ]);
+        }else{
+            redirect('invoices');
+        }
+        session()->flash('change_status',"تم تعديل حالة الدفع بنجاح");
+        return redirect('invoices');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Invoice $invoice)
+    public function edit($invoice_id)
     {
-        //
+        $invoices= Invoice::findOrFail($invoice_id);
+        
+        $attachments= $invoices->invoice_attachments;
+        $sections= Section::all();
+        return view('invoices.update_invoice',compact('invoices','sections','attachments'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Invoice $invoice)
+    public function update(Request $request)
     {
-        //
+        $in_details= Invoice_detail::where('invoice_id',$request->invoice_id)->first();
+        $in_attach= Invoice_attachment::where('invoice_id',$request->invoice_id)->first();
+        $invoice= Invoice::findOrFail($request->invoice_id);
+        //dd($request);
+        $invoice->update([
+            'invoice_number'=> $request->input('invoice_number'),
+            'invoice_Date'=> $request->input('invoice_Date'),
+            'due_date'=> $request->input('Due_date'),
+            'product'=> $request->input('product'),
+            'section_id'=> $request->input('Section'),
+            'discount'=> $request->input('Discount'),
+            'amount_collection'=> $request->input('Amount_collection'),
+            'amount_commission'=> $request->input('Amount_Commission'),
+            'rate_vat'=> $request->input('Rate_VAT'),
+            'value_vat'=> $request->input('Value_VAT'),
+            'total'=> $request->input('Total'),
+            'status'=> 'غير مدفوعه',
+            'value_status'=> 2,
+            'note'=> $request->input('note'),
+            'user'=> Auth::user()->name
+        ]);
+
+        $invoice_id= $request->invoice_id;
+        $in_details->update([
+            'invoice_id'=> $invoice_id,
+            'invoice_number'=> $request->input('invoice_number'),
+            'product'=> $request->input('product'),
+            'section'=> $request->input('Section'),
+            'status'=> 'غير مدفوعه',
+            'value_status'=> 2,
+            'note'=> $request->input('note'),
+            'user'=> Auth::user()->name
+        ]); 
+
+        if($request->hasFile('pic')){
+            $this->validate($request,['pic'=>'required|mimes:pdf|max:10000'],['pic.mimes'=> 'خطأ فى حفظ الفاتورة لا بد أن يكون المرفق pdf']);
+            $invoice_id= $request->invoice_id;
+            $image= $request->file('pic');
+            $file_name= $image->getClientOriginalName();
+            $invoice_number= $request->invoice_number;
+
+            $attachments= new Invoice_attachment();
+            $attachments->file_name= $file_name;
+            $attachments->invoice_number= $invoice_number;
+            $attachments->invoice_id= $invoice_id;
+            $attachments->created_by= Auth::user()->name;
+            $attachments->save();
+
+            //move picture
+            $image_name= $request->pic->getClientOriginalName();
+            $request->pic->move(public_path('Attachments/'.$invoice_number),$image_name);
+
+        }
+        session()->flash('Edit','تم تعديل الفاتورة بنجاح');
+        return back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Invoice $invoice)
+    public function deleteAttachment($attach_id){
+        $attach= Invoice_attachment::findOrFail($attach_id);
+        $attach->delete();
+        session()->flash('att_delete','تم حذف الملف بنجاح');
+        return back();
+    }
+     public function destroy(Request $request)
     {
-        //
+        $invoice= Invoice::findOrFail($request->invoice_id);
+        //$invoice->delete();
+        $att= Invoice_attachment::where('invoice_id',$request->invoice_id)->first();
+        
+        if(!empty($att->invoice_number)){
+            File::deleteDirectory(public_path().'/Attachments'.'/'.$att->invoice_number);
+        }else{
+            echo 'file not found';
+        }
+        $invoice->forceDelete();
+
+        session()->flash('delete','تم حذف الفاتوره بنجاح');
+        return redirect('/invoices');
     }
     public function getProducts($id){
         $products= DB::table('products')->where('section_id',$id)->pluck('name','id');

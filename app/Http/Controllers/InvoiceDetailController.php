@@ -17,7 +17,7 @@ class InvoiceDetailController extends Controller
     public function index($id)
     {
         $invoice= Invoice::findOrFail($id);
-        $details= Invoice_detail::all()->where('invoice_id',$id)->first();
+        $details= Invoice_detail::all()->where('invoice_id',$id)->all();
         $attachments= Invoice_attachment::all()->where('invoice_id',$id)->first();
         return view('invoices.invoice_details',compact('invoice','details','attachments'));
     }

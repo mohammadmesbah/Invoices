@@ -34,6 +34,11 @@ Route::middleware('auth')->group(function () {
 });
 require __DIR__.'/auth.php';
 Route::resource('invoices',InvoiceController::class);
+Route::get('editInvoice/{invoice_id}',[InvoiceController::class,'edit'])->name('invoices.edit');
+Route::get('show_Status/{invoice_id}',[InvoiceController::class,'show'])->name('invoices.show');
+Route::post('change_Status',[InvoiceController::class,'changeStatus'])->name('invoices.changeStatus');
+Route::post('updateInvoice',[InvoiceController::class,'update'])->name('invoices.update');
+Route::get('deleteAttachment/{atta_id}',[InvoiceController::class,'deleteAttachment']);
 Route::resource('sections',SectionController::class);
 Route::resource('products',ProductController::class);
 Route::get('invoice_details/{invoice_number}',[InvoiceDetailController::class,'index']);
@@ -44,5 +49,5 @@ Route::post('delete',[InvoiceDetailController::class,'destroy'])->name('files.de
 Route::get('/section/{id}',[InvoiceController::class,'getProducts']);
 
 Route::get('/tabs',function(){
-    return view('tabs');
+    return view('dropdown');
 });

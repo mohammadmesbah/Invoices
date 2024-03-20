@@ -77,32 +77,35 @@
                                               <tr>
                                                 <th scope="col">رقم الفاتورة</th>
                                                 <th scope="col">القسم</th>
-                                                <th scope="col">تاريخ الاستحقاق</th>
-                                                <th scope="col">مبلغ التحصيل</th>
-                                                <th scope="col">الخصم</th>
-                                                <th scope="col">إجمالى الخصومات</th>
+                                                <th scope="col">المنتج</th>
+                                                <th scope="col">تاريخ التحصيل</th>
+                                                <th scope="col">الملاحظات</th>
+                                                <th scope="col">المستخدم</th>
                                                 <th scope="col">الحالة</th>
                                               </tr>
                                             </thead>
                                             <tbody class="table-group-divider">
+                                              @foreach ($details as $detail)
+                                              
                                               <tr>
-                                                <th scope="row">{{$details->invoice_number}}</th>
-                                                <td>{{$invoice->section->name}}</td>
-                                                <td>{{$invoice->due_date}}</td>
-                                                <td>{{$invoice->amount_collection}}</td>
-                                                <td>{{$invoice->discount}}</td>
-                                                <td>{{$invoice->total}}</td>
+                                                <th scope="row">{{$detail->invoice_number}}</th>
+                                                <td>{{$detail->section}}</td>
+                                                <td>{{$detail->product}}</td>
+                                                <td>{{$detail->payment_date}}</td>
+                                                <td>{{$detail->note}}</td>
+                                                <td>{{$detail->user}}</td>
                                                 <td>
-                                                    @if ($details->value_status == 1)
-                                                    <span class="badge badge-pill badge-success">{{$details->status}}</span>
-                                                    @elseif ($details->value_status == 2)
-                                                    <span class="badge badge-pill badge-danger">{{$details->status}}</span>
+                                                    @if ($detail->value_status == 1)
+                                                    <span class="badge badge-pill badge-success">{{$detail->status}}</span>
+                                                    @elseif ($detail->value_status == 2)
+                                                    <span class="badge badge-pill badge-warning">{{$detail->status}}</span>
                                                     @else 
-                                                    <span class="badge badge-pill badge-warning">{{$details->status}}</span>
+                                                    <span class="badge badge-pill badge-danger">{{$detail->status}}</span>
                                                     @endif    
                                                 </td>
                                               </tr>
-                                              
+                                              @endforeach
+
                                             </tbody>
                                           </table>
                                     </div>

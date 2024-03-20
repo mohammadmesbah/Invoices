@@ -14,4 +14,8 @@ class Invoice_attachment extends Model
         'invoice_id',
         'created_by'
     ];
+
+    public function invoice(){
+        return $this->belongsTo(Invoice::class);
+    }
 }

@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+      
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('section_id')->constrained('sections')->cascadeOnDelete();
+            $table->foreignId('section_id')->references('id')->on('sections')->cascadeOnDelete();
             $table->string('invoice_number');
             $table->date('invoice_Date');
             $table->date('due_date');
@@ -26,11 +27,13 @@ return new class extends Migration
             $table->decimal('total',8,2);
             $table->string('status',50);
             $table->integer('value_status');
+            $table->date('payment_date')->nullable();
             $table->text('note')->nullable();
             $table->string('user');
             $table->softDeletes();
             $table->timestamps();
         });
+
     }
 
     /**
