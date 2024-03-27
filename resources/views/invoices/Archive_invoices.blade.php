@@ -20,42 +20,33 @@
 @endsection
 @section('content')
 
-@if (session()->has('delete'))
+
+
+
+@if (session()->has('Archive'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">
-<strong>{{session()->get('delete')}}</strong>
+<strong>{{session()->get('Archive')}}</strong>
 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
 </div>
 @endif
 
-@if (session()->has('change_status'))
+@if (session()->has('delete_invoice'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">
-<strong>{{session()->get('change_status')}}</strong>
+<strong>{{session()->get('delete_invoice')}}</strong>
 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
 </div>
 @endif
-@if (session()->has('restore_invoice'))
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-<strong>{{session()->get('restore_invoice')}}</strong>
-<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button>
-</div>
-@endif
-
-<!-- row -->
+				<!-- row -->
 <div class="row">
 		
 		<div class="col-xl-12">
 			<div class="card mg-b-20">
 				<div class="card-header pb-0">
-					<div class="d-flex justify-content-between">
-						<a href="invoices/create" class="modal-effect btn btn-primary" style="color:white"><i
-							class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
-					</div>
+				
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -79,7 +70,7 @@
 
 							</thead>
 							<tbody>
-								@foreach ($invoices as $invoice)
+								@foreach ($Archive_invoices as $invoice)
 								
 								<tr>
 									<td>{{$loop->iteration}}</td>
@@ -88,7 +79,7 @@
 									<td>{{$invoice->due_date}}</td>
 									<td>{{$invoice->product}}</td>
 									<td>
-										<a href="{{url('invoice_details')}}/{{$invoice->id}}"> {{$invoice->section->name}} </a>
+										<a href="{{route('invoice.details',$invoice->id)}}"> {{$invoice->section->name}} </a>
 									</td>
 									<td>{{$invoice->discount}}</td>
 									<td>{{$invoice->rate_vat}}</td>
@@ -110,11 +101,9 @@
 <button aria-expanded="false" aria-haspopup="true" class="btn btn-danger"
 data-toggle="dropdown" id="dropdownMenuButton" type="button">Dropdown Menu <i class="fas fa-caret-down ml-1"></i></button>
 <div  class="dropdown-menu tx-13">
-	<a class="dropdown-item" href="{{url('editInvoice')}}/{{$invoice->id}}">تعديل</a>
 	<a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">حذف</a>
-	<a class="dropdown-item"  href="{{route('invoices.show',$invoice->id)}}">تغير حالة الدفع</a>
-	<a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#archive_invoice" href="#">نقل إلى الأرشيف</a>
-	<a class="dropdown-item"  href="{{url('print_invoice')}}/{{$invoice->id}}">طباعة الفاتورة</a>
+	<a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#archive_invoice"
+	data-invoice_id="{{ $invoice->id }}" href="#">نقل إلى الفواتير</a>
 </div>
 </div>
 									</td>
@@ -134,19 +123,21 @@ data-toggle="dropdown" id="dropdownMenuButton" type="button">Dropdown Menu <i cl
 <!-- row closed -->
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
 	  <div class="modal-content">
 		<div class="modal-header">
-		  <h1 class="modal-title fs-5" id="exampleModalLabel">حذف الفاتورة</h1>
-		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		  <h1 class="modal-title" id="exampleModalLabel">حذف الفاتورة</h1>
+		  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
 		</div>
-		<div class="modal-body">
+		<div class="modal-body">&nbsp;&nbsp;
 			هل أنت متأكد من حذف الفاتورة ؟
-		  <form action="invoices/destroy" method="POST">
+		  <form action="ArchiveInvoices/destroy" method="POST">
 			{{method_field('delete')}}
 			@csrf
-			@foreach ($invoices as $invoice)
+			@foreach ($Archive_invoices as $invoice)
 			
 			<input type="hidden" name="invoice_id" value="{{$invoice->id}}">
 			@endforeach
@@ -159,34 +150,36 @@ data-toggle="dropdown" id="dropdownMenuButton" type="button">Dropdown Menu <i cl
 	  </div>
 	</div>
   </div>
-<!-- Modal -->
-<div class="modal fade" id="archive_invoice" tabindex="-1" aria-labelledby="archive_invoiceLabel" aria-hidden="true">
-	<div class="modal-dialog">
-	  <div class="modal-content">
-		<div class="modal-header">
-		  <h1 class="modal-title fs-5" id="archive_invoiceLabel">نقل إلى الأرشيف</h1>
-		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-		</div>
-		<div class="modal-body">
-			هل أنت متأكد من نقل الفاتورة إلى الأرشيف ؟
-		  <form action="invoices/destroy" method="POST">
-			{{method_field('delete')}}
-			@csrf
-			@foreach ($invoices as $invoice)
-			
-			<input type="hidden" name="invoice_id" value="{{$invoice->id}}">
-			<input type="hidden" name="archive_invoice" value="2">
-			@endforeach
-		</div>
-		<div class="modal-footer">
-		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
-		  <button type="submit" class="btn btn-danger">نقل</button>
-		</div>
-	</form>
-	  </div>
-	</div>
-  </div>
 
+    <!--الغاء الارشفة-->
+    <div class="modal fade" id="archive_invoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">الغاء ارشفة الفاتورة</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form action="ArchiveInvoices/update" method="post">
+                        {{ method_field('patch') }}
+                        {{ csrf_field() }}
+                </div>
+                <div class="modal-body">
+                    هل انت متاكد من عملية الغاء الارشفة ؟
+                    <input type="hidden" name="invoice_id" id="invoice_id" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                    <button type="submit" class="btn btn-success">تاكيد</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+			<!-- Container closed -->
+
+		<!-- main-content closed -->
 @endsection
 @section('js')
 <!-- Internal Data tables -->
@@ -210,4 +203,13 @@ data-toggle="dropdown" id="dropdownMenuButton" type="button">Dropdown Menu <i cl
 <script src="{{URL::asset('assets/js/bootstrap.js')}}"></script>
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
+<script>
+    $('#archive_invoice').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget)
+        var invoice_id = button.data('invoice_id')
+        var modal = $(this)
+        modal.find('.modal-body #invoice_id').val(invoice_id);
+    })
+
+</script>
 @endsection

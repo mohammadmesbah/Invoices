@@ -22,7 +22,27 @@ class InvoiceController extends Controller
         $invoices= Invoice::all();
         return view('invoices.invoice',compact('invoices'));
     }
-
+    public function paid_invoices()
+    {
+        $paid_invoices= Invoice::where('value_status',1)->get();
+        return view('invoices.paid_invoices',compact('paid_invoices'));
+    }
+    public function unpaid_invoices()
+    {
+        $unpaid_invoices= Invoice::where('value_status',3)->get();
+        return view('invoices.unpaid_invoices',compact('unpaid_invoices'));
+    }
+    public function partial_paid_invoices()
+    {
+        $partial_paid_invoices= Invoice::where('value_status',2)->get();
+        return view('invoices.partial_paid_invoices',compact('partial_paid_invoices'));
+    }
+    
+    public function print_invoice($invoice_id)
+    {
+        $invoice= Invoice::where('id',$invoice_id)->first();
+        return view('invoices.print_invoice',compact('invoice'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -229,7 +249,14 @@ class InvoiceController extends Controller
      public function destroy(Request $request)
     {
         $invoice= Invoice::findOrFail($request->invoice_id);
-        //$invoice->delete();
+        $archive_invoice= $request->archive_invoice;
+
+        if($archive_invoice == 2){
+            
+            $invoice->delete();
+            session()->flash('Archive','تم نقل الفاتوره إلى الأرشيف بنجاح');
+            return redirect('/ArchiveInvoices');
+        }else{
         $att= Invoice_attachment::where('invoice_id',$request->invoice_id)->first();
         
         if(!empty($att->invoice_number)){
@@ -241,6 +268,7 @@ class InvoiceController extends Controller
 
         session()->flash('delete','تم حذف الفاتوره بنجاح');
         return redirect('/invoices');
+    }
     }
     public function getProducts($id){
         $products= DB::table('products')->where('section_id',$id)->pluck('name','id');

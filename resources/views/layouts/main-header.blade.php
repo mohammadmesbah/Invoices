@@ -16,7 +16,7 @@
 							<input class="form-control" placeholder="Search for anything..." type="search"> <button class="btn"><i class="fas fa-search d-none d-md-block"></i></button>
 						</div>
 					</div>
-					<div class="main-header-right">
+					{{-- <div class="main-header-right">
 						<ul class="nav">
 							<li class="">
 								<div class="dropdown  nav-itemd-none d-md-flex">
@@ -280,7 +280,7 @@
 								</a>
 							</div>
 						</div>
-					</div>
+					</div> --}}
 				</div>
 			</div>
 <!-- /main-header -->
