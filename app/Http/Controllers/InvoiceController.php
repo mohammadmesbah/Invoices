@@ -6,10 +6,13 @@ use App\Models\Invoice;
 use App\Models\Invoice_attachment;
 use App\Models\Invoice_detail;
 use App\Models\Section;
+use App\Models\User;
+use App\Notifications\AddInvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 class InvoiceController extends Controller
@@ -57,6 +60,7 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
+
         Invoice::create([
             'invoice_number'=> $request->invoice_number,
             'invoice_Date'=> $request->invoice_Date,
@@ -106,6 +110,8 @@ class InvoiceController extends Controller
             $request->pic->move(public_path('Attachments/'.$invoice_number),$image_name);
 
         }
+        $user= User::first(); 
+        Notification::send($user, new AddInvoice($invoice_id));
         session()->flash('Add','تم إضافة الفاتورة بنجاح');
         return back();
     }

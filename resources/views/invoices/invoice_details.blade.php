@@ -110,6 +110,9 @@
                                           </table>
                                     </div>
                                     <div class="tab-pane" id="tab3">
+                                    
+                                      @if ($attachments) 
+                                      
                                       <table class="table">
                                         <thead>
                                           <tr>
@@ -148,6 +151,11 @@
                                           
                                         </tbody>
                                       </table>
+                                          
+                                    @else
+                                          
+                                        <h2>لا توجــــد مرفقــــات</h2>
+                                    @endif
                                     </div>
                                 </div>
                             </div>
@@ -217,6 +225,6 @@
 		modal.find('.modal-body #id').val(id);
 		modal.find('.modal-body #file_name').val(file_name);
 		modal.find('.modal-body #invoice_number').val(invoice_number);
-	})
+	});
 </script>
 @endsection
