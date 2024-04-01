@@ -52,10 +52,12 @@
 		<div class="col-xl-12">
 			<div class="card mg-b-20">
 				<div class="card-header pb-0">
-					<div class="d-flex justify-content-between">
+					
 						<a href="invoices/create" class="modal-effect btn btn-primary" style="color:white"><i
 							class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
-					</div>
+						<a href="export/Excel" class="modal-effect btn btn-success" style="color:white"><i
+							class="fas fa-plus"></i>&nbsp; تصدير ملف إكسيل</a>
+					
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">

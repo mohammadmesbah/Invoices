@@ -52,7 +52,8 @@ Route::resource('products',ProductController::class);
     Route::get('print_invoice/{invoice_id}',[InvoiceController::class,'print_invoice']);
     Route::get('deleteAttachment/{atta_id}',[InvoiceController::class,'deleteAttachment']);
     Route::get('/section/{id}',[InvoiceController::class,'getProducts']);
-    
+    Route::get('export/Excel', [InvoiceController::class, 'export']);
+
 
 Route::get('view_file/{folder_name}/{file_name}',[InvoiceDetailController::class,'show']);
 Route::get('download_file/{folder_name}/{file_name}',[InvoiceDetailController::class,'download_file']);

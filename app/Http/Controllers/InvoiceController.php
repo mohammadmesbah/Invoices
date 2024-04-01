@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\InvoicesExport;
 use App\Models\Invoice;
 use App\Models\Invoice_attachment;
 use App\Models\Invoice_detail;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InvoiceController extends Controller
 {
@@ -280,4 +282,10 @@ class InvoiceController extends Controller
         $products= DB::table('products')->where('section_id',$id)->pluck('name','id');
         return json_encode($products);
     }
+
+    public function export() 
+    {
+        return Excel::download(new InvoicesExport, 'قائمة الفواتير.xlsx');
+    }
+
 }
