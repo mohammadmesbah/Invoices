@@ -5,7 +5,9 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceDetailController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 
@@ -32,6 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+        // Our resource routes
+        Route::resource('roles', RoleController::class);
+        Route::resource('users', UserController::class);
 });
 require __DIR__.'/auth.php';
 //Route::fallback(fn()=> redirect('/invoices'));
