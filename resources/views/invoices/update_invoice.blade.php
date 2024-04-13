@@ -175,7 +175,11 @@
             @foreach ($attachments as $att)
             <tr class="table-dark">
                 <td class="table-dark">{{$att->file_name}}</td>
+            @can('حذف المرفق')
+            
                 <td class="table-dark"><a class="btn btn-sm btn-danger" href="{{url('/deleteAttachment')}}/{{$att->id}}">Delete</a></td>
+                
+            @endcan
             </tr>
             @endforeach   
           </tbody> 

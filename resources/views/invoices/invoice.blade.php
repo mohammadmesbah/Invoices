@@ -46,18 +46,31 @@
 </div>
 @endif
 
+<div class="breadcrumb-header justify-content-between">
+	<div class="my-auto">
+		<div class="d-flex">
+			<h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ عرض الفواتير </span>
+		</div>
+	</div>
+	
+</div>
+
 <!-- row -->
 <div class="row">
 		
 		<div class="col-xl-12">
 			<div class="card mg-b-20">
-				<div class="card-header pb-0">
+				<div class="card-header pb-2">
+					@can('اضافة فاتورة')
 					
 						<a href="invoices/create" class="modal-effect btn btn-primary" style="color:white"><i
 							class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
-						<a href="export/Excel" class="modal-effect btn btn-success" style="color:white"><i
-							class="fas fa-plus"></i>&nbsp; تصدير ملف إكسيل</a>
+					@endcan
+					@can('تصدير EXCEL')
 					
+							<a href="export/Excel" class="modal-effect btn btn-success" style="color:white"><i
+							class="fas fa-plus"></i>&nbsp; تصدير ملف إكسيل</a>
+					@endcan
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -110,13 +123,29 @@
 <!-- Example single danger button -->
 <div class="dropdown">
 <button aria-expanded="false" aria-haspopup="true" class="btn btn-danger"
-data-toggle="dropdown" id="dropdownMenuButton" type="button">Dropdown Menu <i class="fas fa-caret-down ml-1"></i></button>
+data-toggle="dropdown" id="dropdownMenuButton" type="button">اختر<i class="fas fa-caret-down ml-1"></i></button>
 <div  class="dropdown-menu tx-13">
 	<a class="dropdown-item" href="{{url('editInvoice')}}/{{$invoice->id}}">تعديل</a>
+	@can('حذف الفاتورة')
+	
 	<a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">حذف</a>
+		
+	@endcan
+	@can('تغير حالة الدفع')
+	
 	<a class="dropdown-item"  href="{{route('invoices.show',$invoice->id)}}">تغير حالة الدفع</a>
+		
+	@endcan
+	@can('ارشفة الفاتورة')
+	
 	<a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#archive_invoice" href="#">نقل إلى الأرشيف</a>
+		
+	@endcan
+	@can('طباعةالفاتورة')
+	
 	<a class="dropdown-item"  href="{{url('print_invoice')}}/{{$invoice->id}}">طباعة الفاتورة</a>
+		
+	@endcan
 </div>
 </div>
 									</td>

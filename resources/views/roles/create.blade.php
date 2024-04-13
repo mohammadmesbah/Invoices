@@ -52,7 +52,7 @@
                     <br />
                     @foreach ($permission as $value)
                         <label>
-                            <input type="checkbox" name="permission[]" value="{{ $value->id }}" class="name">
+                            <input type="checkbox" name="permission[]" value="{{ $value->name }}" class="name">
                             {{ $value->name }}</label>
                         <br />
                     @endforeach

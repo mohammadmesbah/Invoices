@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Storage;
 
 class InvoiceDetailController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware(['permission:حذف المرفق'], ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */

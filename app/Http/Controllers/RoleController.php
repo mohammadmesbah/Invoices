@@ -12,13 +12,13 @@ use Spatie\Permission\Models\Permission;
 class RoleController extends Controller
 {
 
-    /* function __construct()
+    function __construct()
     {
-        $this->middleware(['permission:role-list|role-create|role-edit|role-delete'], ['only' => ['index', 'store']]);
-        $this->middleware(['permission:role-create'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:role-edit'], ['only' => ['edit', 'update']]);
-        $this->middleware(['permission:role-delete'], ['only' => ['destroy']]);
-    } */
+        $this->middleware(['permission:صلاحيات المستخدمين'], ['only' => ['index']]);
+        $this->middleware(['permission:اضافة صلاحية'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:تعديل صلاحية'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:حذف صلاحية'], ['only' => ['destroy']]);
+    }
 
     public function index(Request $request)
     {

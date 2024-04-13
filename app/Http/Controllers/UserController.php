@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
    
+    function __construct()
+    {
+        $this->middleware(['permission:قائمة المستخدمين'], ['only' => ['index']]);
+        $this->middleware(['permission:اضافة مستخدم'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:تعديل مستخدم'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:حذف مستخدم'], ['only' => ['destroy']]);
+    }
     public function index(Request $request)
     {
         $data = User::latest()->paginate(5);
@@ -31,14 +38,15 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+            'role_name' => 'required',
+            'status' => 'required'
         ]);
     
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
     
         $user = User::create($input);
-        $user->assignRole($request->input('roles'));
+        $user->assignRole($request->input('role_name'));
     
         return redirect()->route('users.index')
                         ->with('success','User created successfully');
@@ -65,10 +73,12 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'password' => 'same:confirm-password',
-            'roles' => 'required'
+            'role_name' => 'required',
+            'status' => 'required',
         ]);
     
         $input = $request->all();
+        
         if(!empty($input['password'])){ 
             $input['password'] = Hash::make($input['password']);
         }else{
@@ -76,10 +86,11 @@ class UserController extends Controller
         }
     
         $user = User::find($id);
+        
         $user->update($input);
         DB::table('model_has_roles')->where('model_id',$id)->delete();
     
-        $user->assignRole($request->input('roles'));
+        $user->assignRole($request->input('role_name'));
     
         return redirect()->route('users.index')
                         ->with('success','User updated successfully');

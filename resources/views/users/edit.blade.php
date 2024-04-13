@@ -39,7 +39,8 @@
     @endif
 
 
-    <form action="{{ route('users.update', $user->id) }}" method="PATCH">
+    <form action="{{ route('users.update', $user->id) }}" method="POST">
+        @method('PATCH')
         @csrf
         <div class="row">
             <div class="col-xs-12 mb-3">
@@ -54,6 +55,13 @@
                     <strong>الايميل:</strong>
                     <input type="email" name="email" value="{{ $user->email }}" class="form-control"
                         placeholder="الايميل">
+                </div>
+            </div>
+            <div class="col-xs-12 mb-3">
+                <div class="form-group">
+                    <strong>الحالة:</strong>
+                    <input type="text" name="status" value="{{ $user->status }}" class="form-control"
+                        placeholder="الحالة">
                 </div>
             </div>
             <div class="col-xs-12 mb-3">
@@ -73,7 +81,7 @@
             <div class="col-xs-12 mb-3">
                 <div class="form-group">
                     <strong>الصلاحيات:</strong>
-                    <select class="form-control multiple" multiple name="roles[]">
+                    <select class="form-control multiple" multiple name="role_name[]">
                         @foreach ($roles as $role)
                             <option value="{{ $role }}">{{ $role }}</option>
                         @endforeach

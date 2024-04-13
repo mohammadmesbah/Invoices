@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class ArchiveInvoicesController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware(['permission:ارشيف الفواتير'], ['only' => ['index']]);
+        $this->middleware(['permission:حذف الفاتورة'], ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */

@@ -38,7 +38,8 @@
         </div>
     @endif
 
-    <form action="{{ route('roles.update', $role->id) }}" method="PATCH">
+    <form action="{{ route('roles.update', $role->id) }}" method="POST">
+        @method('PATCH')
         @csrf
         <div class="row">
             <div class="col-xs-12 mb-3">
@@ -55,7 +56,7 @@
                     @foreach ($permission as $value)
                         <label>
                             <input type="checkbox" @if (in_array($value->id, $rolePermissions)) checked @endif name="permission[]"
-                                value="{{ $value->id }}" class="name">
+                                value="{{ $value->name }}" class="name">
                             {{ $value->name }}</label>
                         <br />
                     @endforeach

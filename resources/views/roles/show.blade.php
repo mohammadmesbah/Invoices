@@ -39,7 +39,7 @@
                 <strong>الصلاحيات:</strong>
                 @if (!empty($rolePermissions))
                     @foreach ($rolePermissions as $v)
-                        <label class="label label-secondary text-dark">{{ $v->name }},</label>
+                        <p class="label label-secondary text-dark">{{ $v->name }},</p>
                     @endforeach
                 @endif
             </div>

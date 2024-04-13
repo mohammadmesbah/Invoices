@@ -56,8 +56,12 @@
 	</div>
 @endif
 
-<a class="btn ripple btn-primary mb-3" data-target="#select2modal" data-toggle="modal" href="">إضافة منتج</a>
+@can('اضافة منتج')
 
+<a class="btn ripple btn-primary mb-3" data-target="#select2modal" data-toggle="modal" href=""><i
+	class="fas fa-plus"></i>  إضافة منتج </a>
+	
+@endcan
 		<!-- Basic modal -->
 		<div class="modal" id="select2modal">
 			<div class="modal-dialog" role="document">
@@ -117,11 +121,19 @@
 							<td>{{$product->description}}</td>
 							<td>{{$product->section->name}}</td>
 							<td>
+								@can('تعديل منتج')
+								
 								<a data-toggle="modal" href="#exampleModal2" data-id="{{$product->id}}" 
 									data-name="{{$product->name}}" data-section_name="{{$product->section->name}}" data-description="{{$product->description}}"	
 									class="modal-effect btn btn-success"><i class="fa-solid fa-pen-to-square"></i></a>
+									
+								@endcan
+								@can('حذف منتج')
+								
 								<a data-toggle="modal" href="#modaldemo9" data-id="{{$product->id}}" data-name="{{$product->name}}" 
 									class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+									
+								@endcan
 							</td>
 						  </tr>
 						  	

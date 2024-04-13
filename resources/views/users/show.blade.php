@@ -41,10 +41,16 @@
     </div>
     <div class="d-block col-xs-12 mb-3">
         <div class="form-group">
+            <strong>الحالة:</strong>
+            {{ $user->status }}
+        </div>
+    </div>
+    <div class="d-block col-xs-12 mb-3">
+        <div class="form-group">
             <strong>الصلاحيات:</strong>
             @if(!empty($user->getRoleNames()))
                 @foreach($user->getRoleNames() as $v)
-                    <label class="badge badge-secondary text-dark">{{ $v }}</label>
+                    <label class="badge badge-success text-dark">{{ $v }}</label>
                 @endforeach
             @endif
         </div>

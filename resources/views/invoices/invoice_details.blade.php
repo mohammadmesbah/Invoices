@@ -141,11 +141,15 @@
                                             <td>
                                               <a target="_blank" href="{{url('view_file')}}/{{$attachments->invoice_number}}/{{$attachments->file_name}}" class="btn btn-outline-success" role="button"><i class="fa-solid fa-eye"></i></a>
                                               <a target="_blank" href="{{url('download_file')}}/{{$attachments->invoice_number}}/{{$attachments->file_name}}" class="btn btn-outline-info" role="button"><i class="fa-solid fa-download"></i></a>
+                                              @can('حذف المرفق')
+                                              
                                               <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                               data-id="{{$attachments->id}}" data-file_name="{{$attachments->file_name}}" 
                                               data-invoice_number="{{$attachments->invoice_number}}">
                                                 <i class="fa-solid fa-trash"></i>
                                               </button>
+                                                
+                                              @endcan
                                               
                                           </tr>
                                           

@@ -19,8 +19,9 @@
             <div class="pull-left">
                 
                     <div class="float-end">
-                        @can('role-create')
-                            <a class="btn btn-success" href="{{ route('roles.create') }}">إضافة صلاحية</a>
+                       @can('اضافة صلاحية')
+                            <a class="btn btn-success" href="{{ route('roles.create') }}">
+                                <i class="fas fa-plus"></i>  إضافة صلاحية</a>
                         @endcan
                     </div>
                 
@@ -44,15 +45,19 @@
                 <td>{{ $role->name }}</td>
                 <td>
                     <form action="{{ route('roles.destroy', $role->id) }}" method="POST">
+                        @can('عرض صلاحية')
+                        
                         <a class="btn btn-info" href="{{ route('roles.show', $role->id) }}">عرض</a>
-                        @can('role-edit')
+                            
+                        @endcan
+                        @can('تعديل صلاحية')
                             <a class="btn btn-primary" href="{{ route('roles.edit', $role->id) }}">تعديل</a>
                         @endcan
 
 
                         @csrf
                         @method('DELETE')
-                        @can('product-delete')
+                        @can('حذف صلاحية')
                             <button type="submit" class="btn btn-danger">حذف</button>
                         @endcan
                     </form>

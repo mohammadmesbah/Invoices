@@ -71,7 +71,12 @@
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
 									<div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
-										<a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-sign" data-toggle="modal" href="#modaldemo1">إضافة قسم</a>
+										@can('اضافة قسم')
+										
+										<a class="modal-effect btn btn-primary mb-3" data-effect="effect-sign" data-toggle="modal" href="#modaldemo1">
+											<i class="fas fa-plus"></i>  إضافة قسم</a>
+											
+										@endcan
 									</div>
 								</div>
 							</div>
@@ -93,12 +98,19 @@
 												<td>{{$section->name}}</td>
 												<td>{{$section->description}}</td>
 												<td>
+													@can('تعديل قسم')
+													
 												<a data-toggle="modal" href="#exampleModal2" data-id="{{$section->id}}" 
 													data-name="{{$section->name}}" data-description="{{$section->description}}"	
 													class="modal-effect btn btn-success"><i class="fa-solid fa-pen-to-square"></i></a>
-												<a data-toggle="modal" href="#modaldemo9" data-id="{{$section->id}}" data-name="{{$section->name}}" 
+													
+													@endcan
+													@can('حذف قسم')
+													
+													<a data-toggle="modal" href="#modaldemo9" data-id="{{$section->id}}" data-name="{{$section->name}}" 
 													class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
-												
+													
+													@endcan
 												</td>
 											</tr>
 											@endforeach

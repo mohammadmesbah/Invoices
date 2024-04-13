@@ -54,6 +54,12 @@
             </div>
             <div class="col-xs-12 mb-3">
                 <div class="form-group">
+                    <strong>الحالة:</strong>
+                    <input type="text" name="status" class="form-control" placeholder="الحالة">
+                </div>
+            </div>
+            <div class="col-xs-12 mb-3">
+                <div class="form-group">
                     <strong>كلمة السر:</strong>
                     <input type="password" name="password" class="form-control" placeholder="كلمة السر">
                 </div>
@@ -67,7 +73,7 @@
             <div class="col-xs-12 mb-3">
                 <div class="form-group">
                     <strong>الصلاحية:</strong>
-                    <select class="form-control multiple" multiple name="roles[]">
+                    <select class="form-control multiple" multiple name="role_name[]">
                         @foreach ($roles as $role)
                             <option value="{{ $role }}">{{ $role }}</option>
                         @endforeach
