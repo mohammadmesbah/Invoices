@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArchiveInvoicesController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceDetailController;
+use App\Http\Controllers\InvoiceReportController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -47,19 +48,23 @@ Route::resource('ArchiveInvoices',ArchiveInvoicesController::class);
 Route::resource('sections',SectionController::class);
 Route::resource('products',ProductController::class);
     
-    Route::get('invoice_details/{invoice_id}','InvoiceDetailController@index')->name('invoice.details');
-    Route::get('paid_invoices',[InvoiceController::class,'paid_invoices']);
-    Route::get('unpaid_invoices',[InvoiceController::class,'unpaid_invoices']);
-    Route::get('partial_paid_invoices',[InvoiceController::class,'partial_paid_invoices']);
-    Route::get('editInvoice/{invoice_id}',[InvoiceController::class,'edit'])->name('invoices.edit');
-    Route::get('show_Status/{invoice_id}',[InvoiceController::class,'show'])->name('invoices.show');
-    Route::post('change_Status',[InvoiceController::class,'changeStatus'])->name('invoices.changeStatus');
-    Route::post('updateInvoice',[InvoiceController::class,'update'])->name('invoices.update');
-    Route::get('print_invoice/{invoice_id}',[InvoiceController::class,'print_invoice']);
-    Route::get('deleteAttachment/{atta_id}',[InvoiceController::class,'deleteAttachment']);
-    Route::get('/section/{id}',[InvoiceController::class,'getProducts']);
-    Route::get('export/Excel', [InvoiceController::class, 'export']);
+Route::get('invoice_details/{invoice_id}','InvoiceDetailController@index')->name('invoice.details');
+Route::get('paid_invoices',[InvoiceController::class,'paid_invoices']);
+Route::get('unpaid_invoices',[InvoiceController::class,'unpaid_invoices']);
+Route::get('partial_paid_invoices',[InvoiceController::class,'partial_paid_invoices']);
+Route::get('editInvoice/{invoice_id}',[InvoiceController::class,'edit'])->name('invoices.edit');
+Route::get('show_Status/{invoice_id}',[InvoiceController::class,'show'])->name('invoices.show');
+Route::post('change_Status',[InvoiceController::class,'changeStatus'])->name('invoices.changeStatus');
+Route::post('updateInvoice',[InvoiceController::class,'update'])->name('invoices.update');
+Route::get('print_invoice/{invoice_id}',[InvoiceController::class,'print_invoice']);
+Route::get('deleteAttachment/{atta_id}',[InvoiceController::class,'deleteAttachment']);
+Route::get('/section/{id}',[InvoiceController::class,'getProducts']);
+Route::get('export/Excel', [InvoiceController::class, 'export']);
 
+Route::resource('invoices_report', InvoiceReportController::class);
+Route::post('/Search_invoices', 'InvoiceReportController@Search_invoices');
+Route::get('customer_report', 'InvoiceReportController@customer_report');
+Route::post('Search_customers', 'InvoiceReportController@Search_customers');
 
 Route::get('view_file/{folder_name}/{file_name}',[InvoiceDetailController::class,'show']);
 Route::get('download_file/{folder_name}/{file_name}',[InvoiceDetailController::class,'download_file']);
