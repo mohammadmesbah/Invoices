@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArchiveInvoicesController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceDetailController;
 use App\Http\Controllers\InvoiceReportController;
@@ -27,9 +28,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified','CheckActiveUser'])->name('dashboard');
+Route::get('/dashboard', 'DashboardController@index'
+)->middleware(['auth', 'verified','CheckActiveUser'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
