@@ -6,6 +6,8 @@ use App\Models\Invoice;
 use App\Models\Invoice_attachment;
 use App\Models\Invoice_detail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,8 +25,14 @@ class InvoiceDetailController extends Controller
         $invoice= Invoice::findOrFail($id);
         $details= Invoice_detail::all()->where('invoice_id',$id)->all();
         $attachments= Invoice_attachment::all()->where('invoice_id',$id)->first();
+        $markAsRead= DB::table('notifications')->where("data->invoice_id",$id)
+                    ->where('notifiable_id',Auth::user()->id)->update(['read_at' => now()]);
+        //$markAsRead= Auth::user()->unReadNotifications->markAsRead();
+        if($markAsRead){
         return view('invoices.invoice_details',compact('invoice','details','attachments'));
+        }
     }
+
 
     /**
      * Show the form for creating a new resource.

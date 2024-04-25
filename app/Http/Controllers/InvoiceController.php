@@ -128,8 +128,10 @@ class InvoiceController extends Controller
             $request->pic->move(public_path('Attachments/'.$invoice_number),$image_name);
 
         }
-        $user= User::first(); 
+        $user= User::where('id','!=',auth()->user()->id)->get();
+        
         Notification::send($user, new AddInvoice($invoice_id));
+        
         session()->flash('Add','تم إضافة الفاتورة بنجاح');
         return back();
     }
@@ -304,4 +306,12 @@ class InvoiceController extends Controller
         return Excel::download(new InvoicesExport, 'قائمة الفواتير.xlsx');
     }
 
+    public function markAllAsRead()
+    {
+        $unReadNotifi= Auth::user()->unReadNotifications;
+        if($unReadNotifi){
+            $unReadNotifi->markAsRead();
+            return back();
+        }
+    }
 }

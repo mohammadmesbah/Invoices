@@ -60,6 +60,7 @@ Route::get('print_invoice/{invoice_id}',[InvoiceController::class,'print_invoice
 Route::get('deleteAttachment/{atta_id}',[InvoiceController::class,'deleteAttachment']);
 Route::get('/section/{id}',[InvoiceController::class,'getProducts']);
 Route::get('export/Excel', [InvoiceController::class, 'export']);
+Route::get('markAllAsRead', [InvoiceController::class, 'markAllAsRead']);
 
 Route::resource('invoices_report', InvoiceReportController::class);
 Route::post('/Search_invoices', 'InvoiceReportController@Search_invoices');

@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class AddInvoice extends Notification
 {
@@ -27,7 +28,7 @@ class AddInvoice extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
@@ -50,7 +51,9 @@ class AddInvoice extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'invoice_id' => $this->invoice_id,
+            'title' => 'تم إضافة الفاتورة بواسطة ',
+            'user' => Auth::user()->name,
         ];
     }
 }
