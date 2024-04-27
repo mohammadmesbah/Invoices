@@ -70,8 +70,3 @@ Route::post('Search_customers', 'InvoiceReportController@Search_customers');
 Route::get('view_file/{folder_name}/{file_name}',[InvoiceDetailController::class,'show']);
 Route::get('download_file/{folder_name}/{file_name}',[InvoiceDetailController::class,'download_file']);
 Route::post('delete',[InvoiceDetailController::class,'destroy'])->name('files.destroy');
-
-
-Route::get('/tabs',function(){
-    return view('notification');
-});
